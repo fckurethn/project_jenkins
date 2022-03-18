@@ -16,7 +16,7 @@ pipeline {
         }
         stage("Second step") {
             steps {
-                sh 'run -d -p 8888:5000 fckurethn/my-flask-app'
+                sh 'docker run -d -p 8888:5000 fckurethn/my-flask-app'
             }
         }
     }
