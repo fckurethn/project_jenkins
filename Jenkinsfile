@@ -9,12 +9,12 @@ pipeline {
         timestamps()
     }
     stages {
-        stage("First step") {
+        stage("Build of the image") {
             steps {
                 sh 'docker build -t fckurethn/my-flask-app .'
             }
         }
-        stage("Second step") {
+        stage("Run the container") {
             steps {
                 sh 'docker run -d -p 8888:5000 fckurethn/my-flask-app'
             }
