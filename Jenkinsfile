@@ -20,7 +20,7 @@ pipeline {
         }
         stage("Update Build Version") {
             steps{
-            sh "cat version | sed -r "s/[0-9]+\$/$BUILD_ID/w version""
+            sh "cat version | sed -r "s/[0-9]+/$BUILD_ID/w version""
             }
         }
     }
