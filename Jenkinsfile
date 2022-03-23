@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage("Stop Previous Container") {
             steps {
-		sh "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print$1}')"
+		sh "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print\$1}')"
             }
         }
         stage("Build and Run New release") {
