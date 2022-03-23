@@ -21,6 +21,7 @@ pipeline {
         stage("Update Build Version") {
             steps{
             sh "cat version | sed -r 's/[0-9]+/$BUILD_ID/w version'"
+            sh "git add . && git commit -m 'updated version' && git push origin"
             }
         }
     }
