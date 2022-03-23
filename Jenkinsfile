@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage("Stop Previous Container") {
             steps {
-		sh 'docker stop $(sudo docker ps -a -q | head -n 1)'
+		sh "docker stop \$(docker ps -a -q | head -n 1)"
             }
         }
         stage("Build and Run New release") {
