@@ -9,13 +9,18 @@ pipeline {
     stages {
         stage("Stop Previous Container") {
             steps {
-		sh "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print\$1}')"
+              sh "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print\$1}')"
             }
         }
         stage("Build and Run New release") {
             steps {
-                sh "docker build -t fckurethn/my-flask-app:$BUILD_ID ."
-		sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$BUILD_ID"
+                sh "docker build -t fckurethn/my-flask-app:$(cat version) ."
+                sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$(cat version)"
+            }
+        }
+        stage("Update Build Version") {
+            steps{
+              sh "cat version | sed -r "s/[0-9]+$/$BUILD_ID/w version""
             }
         }
     }
