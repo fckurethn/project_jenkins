@@ -14,14 +14,8 @@ pipeline {
         }
         stage("Build and Run New release") {
             steps {
-                sh "docker build -t fckurethn/my-flask-app:\$(cat version) ."
-                sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:\$(cat version)"
-            }
-        }
-        stage("Update Build Version") {
-            steps{
-            sh "cat version | sed -r 's/[0-9]+/$BUILD_ID/w version'"
-            sh "git add . && git commit -m 'updated version' && git push origin"
+                sh "docker build -t fckurethn/my-flask-app:$BUILD_ID ."
+                sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$BUILD_ID"
             }
         }
     }
