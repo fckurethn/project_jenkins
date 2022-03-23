@@ -7,14 +7,15 @@ pipeline {
         timestamps()
     }
     stages {
-        stage("Build of the image") {
+        stage("Stop Previous Container") {
             steps {
-                sh "docker build -t fckurethn/my-flask-app:$BUILD_ID ."
+		sh "docker stop $(sudo docker ps -a -q | head -n 1)"
             }
         }
-        stage("Run the container") {
+        stage("Build and Run New release") {
             steps {
-                sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$BUILD_ID"
+                sh "docker build -t fckurethn/my-flask-app:$BUILD_ID"
+		sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$BUILD_ID"
             }
         }
     }
