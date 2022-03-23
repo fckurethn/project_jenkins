@@ -14,8 +14,8 @@ pipeline {
         }
         stage("Build and Run New release") {
             steps {
-                sh "docker build -t fckurethn/my-flask-app:$(cat version) ."
-                sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$(cat version)"
+                sh "docker build -t fckurethn/my-flask-app:\$(cat version) ."
+                sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:\$(cat version)"
             }
         }
         stage("Update Build Version") {
