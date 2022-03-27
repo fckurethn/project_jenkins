@@ -7,15 +7,17 @@ pipeline {
         timestamps()
     }
     stages {
-        stage("Stop Previous Container") {
+        stage("Build and Run New Release") {
             steps {
               sh "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print\$1}')"
+              sh "docker build -t fckurethn/my-flask-app:$(git hist master --all HEAD) ."
+              sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$(git hist master --all HEAD)"
+              sh
             }
         }
-        stage("Build and Run New release") {
+        stage("Push to DockerHub and Delete Old Image") {
             steps {
-                sh "docker build -t fckurethn/my-flask-app:$BUILD_ID ."
-                sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$BUILD_ID"
+              sh "echo 'HERE WILL BE USEFUL CODE I PROMICE'"
             }
         }
     }
