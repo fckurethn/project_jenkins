@@ -12,7 +12,6 @@ pipeline {
               sh "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print\$1}')"
               sh "docker build -t fckurethn/my-flask-app:\$(echo `git  tag -l`) ."
               sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:\$(echo `git  tag -l`)"
-              sh
             }
         }
         stage("Push to DockerHub and Delete Old Image") {
