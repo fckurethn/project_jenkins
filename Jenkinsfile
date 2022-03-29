@@ -9,10 +9,9 @@ pipeline {
     stages {
         stage("Build and Run New Release") {
             steps {
-              //sh "./test.sh"
-              sh "echo $TAG_NAME ."
-            //  sh "docker build -t fckurethn/my-flask-app:$TAG_NAME ."
-            //  sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$TAG_NAME"
+              sh "./test.sh"
+              sh "docker build -t fckurethn/my-flask-app:$GIT_COMMIT ."
+              sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$GIT_COMMIT"
             }
         }
         stage("Push to DockerHub and Delete Old Image") {
