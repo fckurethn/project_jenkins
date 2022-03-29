@@ -16,7 +16,7 @@ pipeline {
         }
         stage("Push to DockerHub and Delete Old Image") {
             steps {
-              sh "echo 104f4abM\_ | docker login -u "fckurethn" --password-stdin"
+              sh "cat /home/fckurethn/password | docker login -u "fckurethn" --password-stdin"
               sh "docker push fckurethn/my-cat-app:v$GIT_COMMIT"
               sh "echo 'HERE WILL BE USEFUL CODE I PROMICE'"
             }
