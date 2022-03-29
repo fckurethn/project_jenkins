@@ -20,6 +20,7 @@ pipeline {
             steps {
               sh '''
               echo "104f4abM_" | docker login -u "fckurethn" --password-stdin"
+              sleep 2
               docker push fckurethn/my-cat-app:v$GIT_COMMIT"
               echo 'HERE WILL BE USEFUL CODE I PROMICE'
               '''
