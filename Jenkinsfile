@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage("Build and Run New Release") {
             steps {
-              sh "a=`sudo docker ps | grep fckurethn/my-flask-app | awk '{prin\$1}'`; [ "\$a" = "" ] && echo 'There is no running container so lets go further' || sudo docker stop \$a"
+              sh "a=`sudo docker ps | grep fckurethn/my-flask-app | awk '{prin\$1}'`; [ '\$a' = "" ] && echo 'There is no running container so lets go further' || sudo docker stop \$a"
               sh "docker build -t fckurethn/my-flask-app:$TAG_NAME ."
               sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$TAG_NAME"
             }
