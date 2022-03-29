@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage("Build and Run New Release") {
             steps {
-              sh "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print\$1}') || echo "There is no running containers\, lets go further!"""
+              sh "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print\$1}') || echo "There is no running containers lets go further!"""
               sh "docker build -t fckurethn/my-flask-app:\$(echo \$(git tag -l)) ."
               sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:\$(echo \$(git  tag -l))"
             }
