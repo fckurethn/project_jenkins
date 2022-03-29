@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage("Build and Run New Release") {
             steps {
-              sh "./test.sh"
+              //sh "./test.sh"
               sh "docker build -t fckurethn/my-flask-app:$TAG_NAME ."
               sh "docker run -d -p 8888:5000 fckurethn/my-flask-app:$TAG_NAME"
             }
