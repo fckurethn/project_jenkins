@@ -6,7 +6,7 @@ REPO_LIST=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/r
 for i in ${REPO_LIST}
 do
     IMAGE_TAGS=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${DOCKERHUB_USERNAME}/${i}/tags/?page_size=10000 | jq -r '.results|.[]|.name')
-    IMAGE_TAGS=`echo ${IMAGE_TAGS} | awk '{$1=""; $2=""; print $0}' | cut -c 3-`
+    IMAGE_TAGS=`echo ${IMAGE_TAGS} | awk '{$1=""; $2=""; $3=""; print $0}' | cut -c 3-`
     for j in ${IMAGE_TAGS}
 	do
 	curl -s  -X DELETE  -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${DOCKERHUB_USERNAME}/${i}/tags/${j}/
