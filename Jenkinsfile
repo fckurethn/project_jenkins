@@ -21,7 +21,7 @@ pipeline {
               sh '''
               echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
               docker push fckurethn/my-flask-app:$GIT_COMMIT
-              ./remove_images_dickerhub.sh
+              ./remove_images_dockerhub.sh
               '''
             }
         }
