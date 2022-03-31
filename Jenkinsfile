@@ -28,11 +28,11 @@ pipeline {
             steps {
               sshagent(['deploy']) {
                 sh '''
-                ssh $PROD_USER@$PROD_IP a=`docker ps | grep fckurethn/my-flask-app | awk '{print $1}'`; [ "$a" != "" ] && docker stop $a || echo 'There is no running container, go further'
-                ssh $PROD_USER@$PROD_IP docker rmi -f $(docker images -q)
-                ssh $PROD_USER@$PROD_IP echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-                ssh $PROD_USER@$PROD_IP docker pull fckurethn/my-flask-app:$GIT_COMMIT
-                ssh $PROD_USER@$PROD_IP docker run -d -p 80:5000 fckurethn/my-flask-app:$GIT_COMMIT
+                ssh $PROD_USER@$PROD_IP "a=`docker ps | grep fckurethn/my-flask-app | awk '{print $1}'`; [ "$a" != "" ] && docker stop $a || echo 'There is no running container, go further'"
+                ssh $PROD_USER@$PROD_IP "docker rmi -f $(docker images -q)""
+                ssh $PROD_USER@$PROD_IP "echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin"
+                ssh $PROD_USER@$PROD_IP "docker pull fckurethn/my-flask-app:$GIT_COMMIT"
+                ssh $PROD_USER@$PROD_IP "docker run -d -p 80:5000 fckurethn/my-flask-app:$GIT_COMMIT"
                 '''
               }
           }
