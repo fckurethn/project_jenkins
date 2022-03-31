@@ -18,8 +18,8 @@ pipeline {
             steps {
               sh '''
               echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-              docker push fckurethn/my-flask-app:$GIT_COMMIT
               ./remove_images_dockerhub.sh
+              docker push fckurethn/my-flask-app:$GIT_COMMIT
               docker image prune -a -f
               '''
             }
@@ -29,6 +29,7 @@ pipeline {
               sshagent(['ubuntu(deploy)']) {
                 sh '''
                 a=`docker ps | grep fckurethn/my-flask-app | awk '{print $1}'`; [ "$a" != "" ] && docker stop $a || echo 'There is no running container, go further'
+                docker rmi -f $(docker images -q)
                 echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
                 docker pull fckurethn/my-flask-app:$GIT_COMMIT
                 docker run -d -p 80:5000 fckurethn/my-flask-app:$GIT_COMMIT
