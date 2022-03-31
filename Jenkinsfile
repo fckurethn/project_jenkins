@@ -3,16 +3,14 @@
 pipeline {
     agent any
     options {
-        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+        buildDiscarder(logRotator(numToKeepStr: '3', artifactNumToKeepStr: '3'))
         timestamps()
     }
     stages {
-        stage("Build and Run New Release") {
+        stage("Build New Release") {
             steps {
               sh '''
-              ./test.sh
               docker build -t fckurethn/my-flask-app:$GIT_COMMIT .
-              docker run -d -p 80:5000 fckurethn/my-flask-app:$GIT_COMMIT
               '''
             }
         }
@@ -22,8 +20,19 @@ pipeline {
               echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
               docker push fckurethn/my-flask-app:$GIT_COMMIT
               ./remove_images_dockerhub.sh
+              docker image prune -a -f
               '''
             }
+        }
+        stage("Deploy") {
+          sshPublisher(publishers: [sshPublisherDesc(configName: 'deploy', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '''
+          ./test.sh
+          docker rmi -f $(docker images -q)
+          echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+          docker pull fckurethn/my-flask-app:$GIT_COMMIT
+          docker run -d -p 80:5000 bohdan1993/alpache:$GIT_COMMIT
+          ''', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+
         }
     }
 }
