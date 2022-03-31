@@ -29,7 +29,7 @@ pipeline {
               sshagent(['deploy']) {
                 sh  'ssh -o StrictHostKeyChecking=no $PROD_USER@$PROD_IP uptime'
                 sh '''
-                ssh $PROD_USER@$PROD_IP "docker stop \$(docker ps | grep fckurethn/my-flask-app | awk '{print \$1}')"
+                ssh $PROD_USER@$PROD_IP ./test.sh
                 ssh $PROD_USER@$PROD_IP docker rmi -f $(docker images -q)
                 ssh $PROD_USER@$PROD_IP echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
                 ssh $PROD_USER@$PROD_IP docker pull fckurethn/my-flask-app:$GIT_COMMIT
