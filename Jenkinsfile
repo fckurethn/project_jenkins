@@ -10,7 +10,7 @@ pipeline {
         stage("Build New Release") {
             steps {
               sh '''
-              docker build -t fckurethn/my-flask-app:$GIT_COMMIT .
+              docker build -t fckurethn/my-flask-app:1 .
               '''
             }
         }
