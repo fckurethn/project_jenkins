@@ -28,12 +28,11 @@ pipeline {
           steps {
             sshagent(['ubuntu(deploy)']) {
               sh '''
-              echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
-              docker pull fckurethn/my-flask-app:${GIT_COMMIT}
-              docker run -d -p 80:5000 fckurethn/my-flask-app:${GIT_COMMIT}
+              echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+              docker pull fckurethn/my-flask-app:$GIT_COMMIT
+              docker run -d -p 80:5000 fckurethn/my-flask-app:$GIT_COMMIT
               '''
             }
         }
     }
 }
-//
