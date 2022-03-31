@@ -40,9 +40,9 @@ pipeline {
                     ssh $PROD_USER@$PROD_IP echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
                     ssh $PROD_USER@$PROD_IP docker run -d -p 80:5000 --name demo_app fckurethn/my-flask-app:$GIT_COMMIT
                     '''
+                  }
                 }
               }
           }
       }
-  }
 }
