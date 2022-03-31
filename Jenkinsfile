@@ -27,6 +27,7 @@ pipeline {
         stage("Deploy") {
             steps {
               sshagent(['deploy']) {
+                sh  'ssh -o StrictHostKeyChecking=no $PROD_USER@$PROD_IP uptime'
                 sh '''
                 ssh $PROD_USER@$PROD_IP a=`docker ps | grep fckurethn/my-flask-app | awk '{print $1}'`; [ "$a" != "" ] && docker stop $a || echo 'There is no running container, go further'
                 ssh $PROD_USER@$PROD_IP docker rmi -f $(docker images -q)
