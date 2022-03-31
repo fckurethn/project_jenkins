@@ -19,7 +19,7 @@ pipeline {
         stage("Push to DockerHub and Delete Old Image") {
             steps {
               sh '''
-              echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+              echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
               docker push fckurethn/my-flask-app:$GIT_COMMIT
               ./remove_images_dockerhub.sh
               '''
