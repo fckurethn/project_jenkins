@@ -27,14 +27,20 @@ pipeline {
         stage("Deploy") {
             steps {
               sshagent(['deploy']) {
-                sh  'ssh -o StrictHostKeyChecking=no $PROD_USER@$PROD_IP uptime'
-                sh '''
-                ssh $PROD_USER@$PROD_IP ./test.sh
-                ssh $PROD_USER@$PROD_IP docker rmi -f $(docker images -q)
-                ssh $PROD_USER@$PROD_IP echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-                ssh $PROD_USER@$PROD_IP docker pull fckurethn/my-flask-app:$GIT_COMMIT
-                ssh $PROD_USER@$PROD_IP docker run -d -p 80:5000 fckurethn/my-flask-app:$GIT_COMMIT
-                '''
+                sh  "ssh -o StrictHostKeyChecking=no $PROD_USER@$PROD_IP uptime"
+                sh "ssh $PROD_USER@$PROD_IP docker pull fckurethn/my-flask-app:$GIT_COMMIT"
+                try {
+                  sh "ssh $PROD_USER@$PROD_IP docker run -d -p 80:5000 --name demo_app fckurethn/my-flask-app:$GIT_COMMIT"
+                }
+                catch (exc) {
+                  sh '''
+                    ssh $PROD_USER@$PROD_IP docker stop demo_app
+                    ssh $PROD_USER@$PROD_IP docker rm demo_app
+                    ssh $PROD_USER@$PROD_IP docker rmi -f $(docker images -q)
+                    ssh $PROD_USER@$PROD_IP echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+                    ssh $PROD_USER@$PROD_IP docker run -d -p 80:5000 --name demo_app fckurethn/my-flask-app:$GIT_COMMIT
+                    '''
+                }
               }
           }
       }
