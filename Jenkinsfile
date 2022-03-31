@@ -12,7 +12,7 @@ pipeline {
               sh '''
               ./test.sh
               docker build -t fckurethn/my-flask-app:$GIT_COMMIT .
-              docker run -d -p 8888:5000 fckurethn/my-flask-app:$GIT_COMMIT
+              docker run -d -p 80:5000 fckurethn/my-flask-app:$GIT_COMMIT
               '''
             }
         }
