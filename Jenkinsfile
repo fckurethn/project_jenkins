@@ -29,7 +29,7 @@ pipeline {
               sshagent(['deploy']) {
                 script {
                 sh  "ssh -o StrictHostKeyChecking=no $PROD_USER@$PROD_IP uptime"
-                sh "ssh $PROD_USER@$PROD_IP docker pull fckurethn/my-flask-app:$GIT_COMMIT"
+                sh  "ssh $PROD_USER@$PROD_IP docker pull fckurethn/my-flask-app:$GIT_COMMIT"
                 try {
                   sh "ssh $PROD_USER@$PROD_IP docker run -d -p 80:5000 --name demo_app fckurethn/my-flask-app:$GIT_COMMIT"
                     }
